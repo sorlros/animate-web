@@ -1,0 +1,27 @@
+// 마우스 스크롤시 하나의 영역만큼 이동
+
+		// window.addEventListener(
+		// 	"wheel",
+		// 	function (e) {
+		// 		e.preventDefault()
+		// 	},
+		// 	{ passive: false }
+		// )
+
+		// const defaultHtml = $("html")
+		// let page = 1
+
+		// defaultHtml.animate({ scrollTop: 0 }, 10)
+
+		// $(window).on("wheel", function (e) {
+		// 	if (defaultHtml.is(":animated")) return
+		// 	if (e.originalEvent.deltaY > 0) {
+		// 		if (page === 3) return
+		// 		page++
+		// 	} else if (e.originalEvent.deltaY < 0) {
+		// 		if (page === 1) return
+		// 		page--
+		// 	}
+		// 	const posTop = (page - 1) * $(window).height()
+		// 	defaultHtml.animate({ scrollTop: posTop })
+		// })

@@ -1,0 +1,39 @@
+.wrapper {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	position: relative;
+	overflow: hidden;
+}
+
+.homeCircle {
+	width: 600px;
+	height: 600px;
+	border-radius: 50%;
+	background-color: rgb(253, 189, 80);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	overflow: hidden;
+}
+
+.planets {
+	width: 600px;
+	height: 600px;
+	/* display: inline-block; */
+	/* position: absolute;
+	top: 50%;
+	left: 50%; */
+}
+
+.moveCircle {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.anim {
+	top: 0;
+	left: 0;
+}
