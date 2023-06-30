@@ -4,6 +4,8 @@
 	height: 100vh;
 	margin: 0;
 	position: relative;
+	overflow-y: scroll;
+	z-index: 700;
 }
 
 .homeCircle {
@@ -39,31 +41,21 @@
 
 .scrollMark {
 	position: absolute;
-	bottom: 5%;
+	bottom: 3%;
 	left: 50%;
 	transform: translateX(-50%);
 }
 
 .scrollMark p {
 	text-align: center;
-	color: black;
+	color: white;
+	font-size: 14px;
 }
 
 .planets {
 	display: none;
 	width: 100%;
 	height: 100%;
-}
-
-.canvas {
-	position: fixed;
-	margin: 0 auto;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	z-index: 999;
-	/* background-color: transparent; */
 }
 
 .sec {
@@ -81,3 +73,25 @@
 .section::-webkit-scrollbar {
 	display: none; /* Chrome, Safari, Opera*/
 }
+
+.second-wrapper {
+	width: 100%;
+	height: 300vh;
+	overflow: hidden;
+	position: relative;
+	display: none;
+	top: 0;
+	left: 0;
+	z-index: 900;
+}
+
+.second-wrapper-active {
+	display: block;
+}
+
+.land-section {
+	width: 100%;
+	height: 100vh;
+}
+
+/* z-index 구분으로 영역나누기 */

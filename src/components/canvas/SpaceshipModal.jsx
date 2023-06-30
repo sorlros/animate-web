@@ -3,97 +3,110 @@ import React, { useEffect, Suspense, useState, useRef } from "react";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import Loader from "../Loader";
 import * as THREE from "three";
+import gsap from "gsap";
+import throttle from "lodash/throttle";
 
-export const SpaceshipModal = ({ scrollCount, meshRef }) => {
+export const SpaceshipModal = ({ meshRef }) => {
 	const { scene } = useGLTF("./raven_spaceship-star_conflict_v.2/scene.gltf");
 
-	useFrame(() => {
-		if (meshRef.current) {
-			const currentPosition = meshRef.current.position.clone();
-			const currentScale = meshRef.current.scale.clone();
-
-			// 0일 때
-			if (scrollCount === 0) {
-				const targetPosition = new THREE.Vector3(0, 0, 0);
-				const targetScale = new THREE.Vector3(0.002, 0.002, 0.002);
-				meshRef.current.position.copy(targetPosition);
-				meshRef.current.scale.copy(targetScale);
-			}
-			// 1일 때
-			else if (scrollCount === 1) {
-				const targetPosition = new THREE.Vector3(15, 5, 0);
-				const targetScale = new THREE.Vector3(0.002, 0.002, 0.002);
-				meshRef.current.position.lerp(targetPosition, 0.05);
-				meshRef.current.scale.lerp(targetScale, 0.05);
-			}
-			// 2일 때
-			else if (scrollCount === 2) {
-				const targetPosition = new THREE.Vector3(30, 10, 0);
-				const targetScale = new THREE.Vector3(0.002, 0.002, 0.002);
-				meshRef.current.position.lerp(targetPosition, 0.05);
-				meshRef.current.scale.lerp(targetScale, 0.05);
-			}
-			// 3일 때
-			else if (scrollCount === 3) {
-				const targetPosition = new THREE.Vector3(15, 0, 0);
-				const targetScale = new THREE.Vector3(0.004, 0.004, 0.004);
-				meshRef.current.position.copy(targetPosition);
-				meshRef.current.scale.copy(targetScale);
-			}
-		}
-	});
-
 	return (
-		<group rotation={[Math.PI / 4, Math.PI / 2, 0]} ref={meshRef}>
-			<primitive object={scene} />
+		<group rotation={[Math.PI / 4, Math.PI / 2, 0]} ref={meshRef} scale={[0.002, 0.002, 0.002]}>
+			<primitive object={scene} className="gsap-object" tabIndex={-1} />
 		</group>
 	);
 };
 
-const SpaceshipModalCanvas = () => {
+const SpaceshipModalCanvas = ({ wholePageState, page }) => {
+	const [page2, setPage2] = useState(page);
 	const [scrollCount, setScrollCount] = useState(0);
-	const scrollRef = useRef(null);
+
 	const meshRef = useRef(null);
+
+	const handleScroll = (event) => {
+		const scrollY = event.deltaY;
+
+		const currentScroll = window.pageYOffset;
+	};
 
 	useEffect(() => {
 		const handleScroll = (event) => {
-			event.preventDefault();
-			const scroll = event.deltaY;
+			const scrollY = event.deltaY;
+			const currentScroll = window.pageYOffset;
 
-			if (scroll > 0) {
-				setScrollCount((prevScrollCount) => Math.min(prevScrollCount + 1, 3));
-			} else if (scroll < 0) {
-				setScrollCount((prevScrollCount) => Math.max(prevScrollCount - 1, 0));
+			if (currentScroll > 150) {
+				setScrollCount(1);
+			} else if (currentScroll > 300) {
+				setScrollCount(2);
+			}
+
+			if (currentScroll === 0 && scrollY < 0) {
+				setPage2(1);
+				wholePageState(page2);
 			}
 		};
 
-		if (scrollRef.current) {
-			scrollRef.current.addEventListener("wheel", handleScroll);
-		}
+		window.addEventListener("wheel", handleScroll);
 
 		return () => {
-			if (scrollRef.current) {
-				scrollRef.current.removeEventListener("wheel", handleScroll);
-			}
+			window.removeEventListener("wheel", handleScroll);
 		};
 	}, []);
 
+	useEffect(() => {
+		const element = document.querySelector(".canvas-object");
+
+		if (scrollCount === 1) {
+			gsap.to(element, {
+				duration: 1,
+				rotation: "-90deg",
+				top: "30%",
+				left: "40%",
+			});
+		} else if (scrollCount === 2) {
+			gsap.to(element, {
+				duration: 1,
+				top: "20%",
+				left: "50%",
+			});
+		}
+	}, [scrollCount]);
+
 	return (
-		<Canvas
-			frameloop="false"
+		<div
+			id="container"
 			style={{
-				zIndex: 999,
+				width: "100%",
+				height: "300vh",
 				position: "absolute",
+				top: 0,
+				left: 0,
+				zIndex: 900,
+				display: "flex",
 			}}
-			ref={scrollRef}
+			onWheel={handleScroll}
 		>
-			<Suspense fallback={<Loader />}>
-				<OrbitControls enableZoom={true} />
-				<ambientLight color="#CCCCCC" intensity={0.5} />
-				<directionalLight castShadow={false} />
-				<SpaceshipModal scrollCount={scrollCount} meshRef={meshRef} />
-			</Suspense>
-		</Canvas>
+			<Canvas
+				className="canvas-object"
+				frameloop="false"
+				style={{
+					width: "100%",
+					height: "100vh",
+					position: "fixed",
+					top: "50%",
+					left: "50%",
+					transform: "translate(-50%, -50%)",
+					zIndex: 999,
+					overflowStyle: "none",
+				}}
+			>
+				<Suspense fallback={<Loader />}>
+					<OrbitControls enableZoom={false} enableRotate={false} />
+					<ambientLight color="#CCCCCC" intensity={0.5} />
+					<directionalLight castShadow={false} />
+					<SpaceshipModal scrollCount={scrollCount} meshRef={meshRef} />
+				</Suspense>
+			</Canvas>
+		</div>
 	);
 };
 

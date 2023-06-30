@@ -7,15 +7,28 @@ import StarsCanvas from "@/components/canvas/Stars";
 import { motion } from "framer-motion";
 import HomeCircle from "../../components/home/HomeCircle";
 import { useRouter } from "next/router";
+import SpaceshipModalCanvas from "@/components/canvas/SpaceshipModal";
+import earth from "../../../public/earth.jpg";
+import Image from "next/image";
 
 const Home = () => {
 	const scrollRef = useRef(null);
 	const [number, setNumber] = useState();
 	const router = useRouter();
 
+	const [page, setPage] = useState(1);
+
+	const hanldePageChange = (page) => {
+		setPage(page);
+	};
+
 	const handleAnimatedComplete = () => {
-		if (scroll.scrollDown) {
-			router.push("/space-area", undefined, { shallow: true });
+		if (scroll.scrollDown && page === 1) {
+			setPage(2);
+			const firstWrapper = document.querySelector(".section");
+			const secondWrapper = document.querySelector(".second-wrapper");
+			firstWrapper.style.display = "none";
+			secondWrapper.style.display = "block";
 		} else if (!scroll.scrollDown) {
 			return null;
 		}
@@ -30,11 +43,30 @@ const Home = () => {
 	});
 
 	useEffect(() => {
+		const wrapper = document.querySelector(".section");
+		const secondWrapper = document.querySelector(".second-wrapper");
+
+		if (page === 1) {
+			wrapper.style.display = "block";
+			secondWrapper.style.display = "none";
+			setScroll({
+				scrollDown: false,
+				scrollUp: false,
+			});
+		} else {
+			wrapper.style.display = "none";
+			secondWrapper.style.display = "block";
+		}
+	}, [page]);
+
+	useEffect(() => {
 		setNumber(0);
 		setScroll({
 			scrollDown: false,
 			scrollUp: false,
 		});
+
+		console.log(page);
 
 		const handleScroll = (event) => {
 			// 스크롤 다운
@@ -55,6 +87,7 @@ const Home = () => {
 					scrollDown: false,
 				});
 			}
+			// console.log("scroll", scroll);
 		};
 
 		if (scrollRef.current) {
@@ -65,7 +98,7 @@ const Home = () => {
 				scrollRef.current.removeEventListener("wheel", handleScroll);
 			}
 		};
-	}, []);
+	}, [page]);
 
 	return (
 		<>
@@ -119,19 +152,36 @@ const Home = () => {
 						<Text1 number={number} />
 					</motion.div>
 
-					<div className={styles.scrollMark}>
+					<motion.div
+						className={styles.scrollMark}
+						animate={{
+							display: scroll.scrollDown ? "none" : "block",
+						}}
+					>
 						<p>SCROLL TO UP OR DOWN</p>
-					</div>
+					</motion.div>
 				</div>
-
-				{/* <div style={{ width: "100%", height: "100vh" }} className="section">
-					<StarsCanvas />
-				</div>
-
-				<div style={{ width: "100%", height: "100vh" }} className="section">
-					<SpaceshipCanvas />
-				</div> */}
 			</div>
+
+			<motion.div className="second-wrapper" style={{ display: "none" }}>
+				<motion.div
+					className="land-section"
+					style={{ zIndex: 900 }}
+					// initial={{ position: "fixed", top: 0 }}
+				>
+					<Image src={earth} alt="earth" style={{ width: "100%", height: "100vh" }} />
+				</motion.div>
+				<StarsCanvas />
+				<motion.div
+					initial={{ scale: 0 }}
+					transition={{ duration: 1 }}
+					animate={{
+						scale: page === 2 ? 1 : 0, // 이 부분 해야할것
+					}}
+				>
+					<SpaceshipModalCanvas wholePageState={hanldePageChange} page={page} />
+				</motion.div>
+			</motion.div>
 		</>
 	);
 };
