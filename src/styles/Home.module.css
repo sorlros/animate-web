@@ -17,7 +17,7 @@
 		5px 5px 15px 5px rgba(0, 0, 0, 0); */
 	box-shadow: #fff 0 -1px 40px, #ff0 0 -2px 40px, #ff8000 0 -10px 20px, red 0 -18px 40px,
 		5px 5px 15px 5px rgba(0, 0, 0, 0);
-	animation: changeBoxShadow 5s infinite;
+	animation: changeBoxShadow 4s infinite;
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -85,13 +85,14 @@
 	z-index: 900;
 }
 
-.second-wrapper-active {
+/* .second-wrapper-active {
 	display: block;
-}
+} */
 
 .land-section {
 	width: 100%;
 	height: 100vh;
+	z-index: 999;
 }
 
 /* z-index 구분으로 영역나누기 */

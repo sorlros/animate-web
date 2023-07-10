@@ -13,12 +13,13 @@ import Image from "next/image";
 
 const Home = () => {
 	const scrollRef = useRef(null);
+	const secondWrapperRef = useRef(null);
 	const [number, setNumber] = useState();
-	const router = useRouter();
+	// const router = useRouter();
 
 	const [page, setPage] = useState(1);
 
-	const hanldePageChange = (page) => {
+	const hanldeChangePage = (page) => {
 		setPage(page);
 	};
 
@@ -57,6 +58,25 @@ const Home = () => {
 			wrapper.style.display = "none";
 			secondWrapper.style.display = "block";
 		}
+
+		const handleScroll2 = (event) => {
+			event.preventDefault();
+
+			event.deltaY > 0;
+		};
+
+		const timer = setInterval(() => {
+			if (secondWrapperRef.current) {
+				secondWrapperRef.current.addEventListener("wheel", handleScroll2);
+			}
+		}, 100);
+
+		return () => {
+			if (secondWrapperRef.current) {
+				clearInterval(timer);
+				secondWrapperRef.current.removeEventListener("wheel", handleScroll2);
+			}
+		};
 	}, [page]);
 
 	useEffect(() => {
@@ -66,13 +86,10 @@ const Home = () => {
 			scrollUp: false,
 		});
 
-		console.log(page);
-
 		const handleScroll = (event) => {
 			// 스크롤 다운
 			if (event.deltaY > 0) {
 				// console.log("스크롤 다운")
-				event.preventDefault();
 				setScroll({
 					scrollUp: false,
 					scrollDown: true,
@@ -81,24 +98,25 @@ const Home = () => {
 			// 스크롤 업
 			else if (event.deltaY < 0) {
 				// console.log("스크롤 업")
-				event.preventDefault();
 				setScroll({
 					scrollUp: true,
 					scrollDown: false,
 				});
 			}
-			// console.log("scroll", scroll);
 		};
 
-		if (scrollRef.current) {
-			scrollRef.current.addEventListener("wheel", handleScroll);
-		}
+		const timer = setInterval(() => {
+			if (scrollRef.current) {
+				scrollRef.current.addEventListener("wheel", handleScroll);
+			}
+		}, 100);
 		return () => {
+			clearInterval(timer);
 			if (scrollRef.current) {
 				scrollRef.current.removeEventListener("wheel", handleScroll);
 			}
 		};
-	}, [page]);
+	}, []);
 
 	return (
 		<>
@@ -163,23 +181,21 @@ const Home = () => {
 				</div>
 			</div>
 
-			<motion.div className="second-wrapper" style={{ display: "none" }}>
+			<motion.div
+				className="second-wrapper"
+				style={{ display: "none", zIndex: 999 }}
+				ref={secondWrapperRef}
+			>
 				<motion.div
 					className="land-section"
-					style={{ zIndex: 900 }}
+
 					// initial={{ position: "fixed", top: 0 }}
 				>
 					<Image src={earth} alt="earth" style={{ width: "100%", height: "100vh" }} />
 				</motion.div>
 				<StarsCanvas />
-				<motion.div
-					initial={{ scale: 0 }}
-					transition={{ duration: 1 }}
-					animate={{
-						scale: page === 2 ? 1 : 0, // 이 부분 해야할것
-					}}
-				>
-					<SpaceshipModalCanvas wholePageState={hanldePageChange} page={page} />
+				<motion.div>
+					<SpaceshipModalCanvas wholePageState={hanldeChangePage} page={page} />
 				</motion.div>
 			</motion.div>
 		</>
