@@ -19,30 +19,48 @@ export const SpaceshipModal = ({ meshRef }) => {
 const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 	const [page2, setPage2] = useState(page);
 	const [scrollCount, setScrollCount] = useState(0);
+	const [animateValue, setAnimateValue] = useState("initial");
 
 	const meshRef = useRef(null);
 
 	const variants = {
-		initial: { bottom: "-50px", left: "45%" },
+		initial: { bottom: "-300px", left: "45%" },
 		sectionOne: { bottom: "45%", left: "55%" },
 		sectionTwo: { bottom: "5%", left: "55%" },
-		sectionThree: { rotation: "270deg", bottom: "5%", left: "55%" },
+		sectionThree: { rotation: "270deg", bottom: "20%", left: "55%" },
 	};
 
 	useEffect(() => {
 		const handleScroll = (event) => {
 			const scrollY = event.deltaY;
+			console.log(scrollY, "scsc");
 			const currentScroll = window.pageYOffset;
 
-			const isScrollPositive = scrollY > 0;
+			if (scrollY > 0) {
+				setTimeout(() => {
+					const newAnimateValue =
+						animateValue === "initial" ? "sectionOne" : "sectionTwo";
+					setAnimateValue(newAnimateValue);
+				}, 500);
+			} else if (scrollY < 0) {
+				setTimeout(() => {
+					if (animateValue === "sectionOne") {
+						const newAnimateValue = "initial";
+						setAnimateValue(newAnimateValue);
+					} else if (animateValue === "sectionTwo") {
+						const newAnimateValue = "sectionOne";
+						setAnimateValue(newAnimateValue);
+					}
+				}, 500);
+			}
 
-			if (currentScroll === 0 && scrollY < 0) {
+			console.log(animateValue, "animateValue");
+
+			if (currentScroll === 0 && scrollY < 0 && animateValue === "initial") {
 				setPage2(1);
 				setScrollCount(0);
 				wholePageState(page2);
 			}
-
-			console.log(isScrollPositive());
 		};
 
 		window.addEventListener("wheel", handleScroll);
@@ -50,7 +68,7 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 		return () => {
 			window.removeEventListener("wheel", handleScroll);
 		};
-	}, []);
+	}, [animateValue]);
 
 	return (
 		<div
@@ -78,7 +96,7 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 					overflowStyle: "none",
 				}}
 				initial="initial"
-				animate={isScrollPositive ? "sectionOne" : "initial"}
+				animate={animateValue} // <=== 수정
 				variants={variants}
 				transition={{ duration: 1 }}
 			>
