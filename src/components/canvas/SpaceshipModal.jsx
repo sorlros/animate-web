@@ -18,7 +18,6 @@ export const SpaceshipModal = ({ meshRef }) => {
 
 const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 	const [page2, setPage2] = useState(page);
-	const [scrollCount, setScrollCount] = useState(0);
 	const [animateValue, setAnimateValue] = useState("initial");
 
 	const meshRef = useRef(null);
@@ -58,7 +57,7 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 
 			if (currentScroll === 0 && scrollY < 0 && animateValue === "initial") {
 				setPage2(1);
-				setScrollCount(0);
+
 				wholePageState(page2);
 			}
 		};
@@ -80,11 +79,7 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 				top: 0,
 				left: 0,
 				zIndex: 900,
-				// display: "flex",
-				// justifyContent: "center",
-				// alignItems: "center",
 			}}
-			// onWheel={handleScroll}
 		>
 			<motion.div
 				className="canvas-object"

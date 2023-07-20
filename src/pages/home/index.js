@@ -19,6 +19,11 @@ const Home = () => {
 
 	const [page, setPage] = useState(1);
 
+	const [animation, setAnimation] = useState({
+		top: "",
+		left: "",
+	});
+
 	const hanldeChangePage = (page) => {
 		setPage(page);
 	};
@@ -118,6 +123,15 @@ const Home = () => {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (wholePageState > 2) {
+			setAnimation({
+				top: "",
+				left: "",
+			});
+		}
+	});
+
 	return (
 		<>
 			<div ref={scrollRef}>
@@ -188,8 +202,10 @@ const Home = () => {
 			>
 				<motion.div
 					className="land-section"
-
-					// initial={{ position: "fixed", top: 0 }}
+					wholePageState={hanldeChangePage}
+					animate={{
+						top: wholePageState > 2 ? "100vh" : "0",
+					}}
 				>
 					<Image src={earth} alt="earth" style={{ width: "100%", height: "100vh" }} />
 				</motion.div>
