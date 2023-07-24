@@ -32,7 +32,7 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 	useEffect(() => {
 		const handleScroll = (event) => {
 			const scrollY = event.deltaY;
-			console.log(scrollY, "scsc");
+			// console.log(scrollY, "scsc");
 			const currentScroll = window.pageYOffset;
 
 			if (scrollY > 0) {
@@ -40,6 +40,19 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 					const newAnimateValue =
 						animateValue === "initial" ? "sectionOne" : "sectionTwo";
 					setAnimateValue(newAnimateValue);
+					console.log(animateValue, "animateValue");
+					if (animateValue === "sectionOne") {
+						setPage2(3);
+						if (currentScroll === 0 && scrollY < 0) {
+							setPage2(1);
+
+							wholePageState(page2);
+						}
+						wholePageState(page2);
+					} else if (animateValue === "sectionTwo") {
+						setPage2(4);
+						wholePageState(page2);
+					}
 				}, 500);
 			} else if (scrollY < 0) {
 				setTimeout(() => {
@@ -51,14 +64,12 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 						setAnimateValue(newAnimateValue);
 					}
 				}, 500);
-			}
 
-			console.log(animateValue, "animateValue");
-
-			if (currentScroll === 0 && scrollY < 0 && animateValue === "initial") {
-				setPage2(1);
-
-				wholePageState(page2);
+				if (currentScroll === 0 && scrollY < 0 && animateValue === "initial") {
+					setPage2(1);
+					wholePageState(page2);
+					return;
+				}
 			}
 		};
 
@@ -79,6 +90,7 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 				top: 0,
 				left: 0,
 				zIndex: 900,
+				overflowY: "hidden",
 			}}
 		>
 			<motion.div
@@ -93,14 +105,14 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 				initial="initial"
 				animate={animateValue} // <=== 수정
 				variants={variants}
-				transition={{ duration: 1 }}
+				transition={{ duration: 0.5 }}
 			>
 				<Canvas frameloop="false">
 					<Suspense fallback={<Loader />}>
 						<OrbitControls enableZoom={false} enableRotate={false} />
 						<ambientLight color="#CCCCCC" intensity={0.5} />
 						<directionalLight castShadow={false} />
-						<SpaceshipModal scrollCount={scrollCount} meshRef={meshRef} />
+						<SpaceshipModal meshRef={meshRef} />
 					</Suspense>
 				</Canvas>
 			</motion.div>

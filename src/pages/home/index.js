@@ -66,8 +66,6 @@ const Home = () => {
 
 		const handleScroll2 = (event) => {
 			event.preventDefault();
-
-			event.deltaY > 0;
 		};
 
 		const timer = setInterval(() => {
@@ -123,14 +121,14 @@ const Home = () => {
 		};
 	}, []);
 
-	useEffect(() => {
-		if (wholePageState > 2) {
-			setAnimation({
-				top: "",
-				left: "",
-			});
-		}
-	});
+	// useEffect(() => {
+	// 	if (page > 2) {
+	// 		setAnimation({
+	// 			top: "20%",
+	// 			left: "70%",
+	// 		});
+	// 	}
+	// }, [page]);
 
 	return (
 		<>
@@ -202,10 +200,8 @@ const Home = () => {
 			>
 				<motion.div
 					className="land-section"
-					wholePageState={hanldeChangePage}
-					animate={{
-						top: wholePageState > 2 ? "100vh" : "0",
-					}}
+					// wholePageState={hanldeChangePage}
+					// animate={animation}
 				>
 					<Image src={earth} alt="earth" style={{ width: "100%", height: "100vh" }} />
 				</motion.div>
