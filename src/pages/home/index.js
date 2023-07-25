@@ -2,11 +2,11 @@ import styles from "../../styles/Home.module.css";
 import { useEffect, useState, useRef } from "react";
 import RightNav from "@/components/RightNav.jsx";
 import Text1 from "@/components/text/Text1";
-import SpaceshipCanvas from "@/components/canvas/Spaceship";
+
 import StarsCanvas from "@/components/canvas/Stars";
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import HomeCircle from "../../components/home/HomeCircle";
-import { useRouter } from "next/router";
+
 import SpaceshipModalCanvas from "@/components/canvas/SpaceshipModal";
 import earth from "../../../public/earth.jpg";
 import Image from "next/image";
@@ -19,14 +19,16 @@ const Home = () => {
 
 	const [page, setPage] = useState(1);
 
-	const [animation, setAnimation] = useState({
-		top: "",
-		left: "",
-	});
-
 	const hanldeChangePage = (page) => {
 		setPage(page);
 	};
+
+	const { scrollYProgress } = useScroll();
+	const scaleX = useSpring(scrollYProgress, {
+		stiffness: 100,
+		damping: 30,
+		restDelta: 0.001,
+	});
 
 	const handleAnimatedComplete = () => {
 		if (scroll.scrollDown && page === 1) {
@@ -34,7 +36,7 @@ const Home = () => {
 			const firstWrapper = document.querySelector(".section");
 			const secondWrapper = document.querySelector(".second-wrapper");
 			firstWrapper.style.display = "none";
-			secondWrapper.style.display = "block";
+			// secondWrapper.style.display = "block";
 		} else if (!scroll.scrollDown) {
 			return null;
 		}
@@ -54,14 +56,14 @@ const Home = () => {
 
 		if (page === 1) {
 			wrapper.style.display = "block";
-			secondWrapper.style.display = "none";
+			// secondWrapper.style.display = "none";
 			setScroll({
 				scrollDown: false,
 				scrollUp: false,
 			});
 		} else {
 			wrapper.style.display = "none";
-			secondWrapper.style.display = "block";
+			// secondWrapper.style.display = "block";
 		}
 
 		const handleScroll2 = (event) => {
@@ -121,19 +123,10 @@ const Home = () => {
 		};
 	}, []);
 
-	// useEffect(() => {
-	// 	if (page > 2) {
-	// 		setAnimation({
-	// 			top: "20%",
-	// 			left: "70%",
-	// 		});
-	// 	}
-	// }, [page]);
-
 	return (
 		<>
 			<div ref={scrollRef}>
-				<div className={`${styles.wrapper} section`}>
+				<motion.div className={`${styles.wrapper} section`}>
 					<motion.div
 						animate={{
 							scale: scroll.scrollDown ? 0 : 1,
@@ -190,19 +183,23 @@ const Home = () => {
 					>
 						<p>SCROLL TO UP OR DOWN</p>
 					</motion.div>
-				</div>
+				</motion.div>
 			</div>
 
 			<motion.div
 				className="second-wrapper"
-				style={{ display: "none", zIndex: 999 }}
+				style={{
+					display: "none",
+				}}
+				animate={{
+					display: page >= 2 ? "block" : "none",
+					opacity: 1,
+					transition: { duration: 0.5 },
+				}}
 				ref={secondWrapperRef}
 			>
-				<motion.div
-					className="land-section"
-					// wholePageState={hanldeChangePage}
-					// animate={animation}
-				>
+				<motion.div className="progress-bar" style={{ scaleX }} />
+				<motion.div className="land-section">
 					<Image src={earth} alt="earth" style={{ width: "100%", height: "100vh" }} />
 				</motion.div>
 				<StarsCanvas />

@@ -23,7 +23,7 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 	const meshRef = useRef(null);
 
 	const variants = {
-		initial: { bottom: "-300px", left: "45%" },
+		initial: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" },
 		sectionOne: { bottom: "45%", left: "55%" },
 		sectionTwo: { bottom: "5%", left: "55%" },
 		sectionThree: { rotation: "270deg", bottom: "20%", left: "55%" },
