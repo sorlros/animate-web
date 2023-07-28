@@ -9,6 +9,11 @@ import HomeCircle from "../../components/home/HomeCircle";
 
 import SpaceshipModalCanvas from "@/components/canvas/SpaceshipModal";
 import earth from "../../../public/earth.jpg";
+
+import planetPic from "../../../public/planet001.png";
+import planetPic2 from "../../../public/planet002.png";
+import planetPic3 from "../../../public/planet003.png";
+import planetPic4 from "../../../public/planet004.png";
 import Image from "next/image";
 
 const Home = () => {
@@ -199,9 +204,47 @@ const Home = () => {
 				ref={secondWrapperRef}
 			>
 				<motion.div className="progress-bar" style={{ scaleX }} />
-				<motion.div className="land-section">
+
+				{/* <motion.div className="land-section">
 					<Image src={earth} alt="earth" style={{ width: "100%", height: "100vh" }} />
+				</motion.div> */}
+
+				<motion.div className="sc-container">
+					<Image
+						className="sc-planet"
+						src={planetPic}
+						alt="planet01"
+						style={{
+							width: "400px",
+							height: "400px",
+						}}
+					/>
+					<Image
+						src={planetPic2}
+						alt="planet02"
+						style={{
+							width: "400px",
+							height: "400px",
+						}}
+					/>
+					<Image
+						src={planetPic3}
+						alt="planet03"
+						style={{
+							width: "400px",
+							height: "400px",
+						}}
+					/>
+					<Image
+						src={planetPic4}
+						alt="plaent04"
+						style={{
+							width: "400px",
+							height: "400px",
+						}}
+					/>
 				</motion.div>
+
 				<StarsCanvas />
 				<motion.div>
 					<SpaceshipModalCanvas wholePageState={hanldeChangePage} page={page} />

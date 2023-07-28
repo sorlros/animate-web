@@ -23,8 +23,13 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 	const meshRef = useRef(null);
 
 	const variants = {
-		initial: { top: "50%", left: "50%", transform: "translate(-50%, -50%)" },
-		sectionOne: { bottom: "45%", left: "55%" },
+		initial: {
+			top: "50%",
+			left: "50%",
+			transform: "translate(-50%, -50%)",
+			transformOrigin: "center center",
+		},
+		sectionOne: { transform: "rotate(90deg)", transition: 0.5 },
 		sectionTwo: { bottom: "5%", left: "55%" },
 		sectionThree: { rotation: "270deg", bottom: "20%", left: "55%" },
 	};
@@ -85,7 +90,7 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 			id="container"
 			style={{
 				width: "100%",
-				height: "300vh",
+				height: "100vh",
 				position: "absolute",
 				top: 0,
 				left: 0,
@@ -101,6 +106,11 @@ const SpaceshipModalCanvas = ({ wholePageState, page }) => {
 					position: "fixed",
 					zIndex: 999,
 					overflowStyle: "none",
+					transformOrigin: "center center",
+					position: "absolute",
+					top: "50%",
+					left: "50%",
+					transform: "translate(-50%, -50%)",
 				}}
 				initial="initial"
 				animate={animateValue} // <=== 수정

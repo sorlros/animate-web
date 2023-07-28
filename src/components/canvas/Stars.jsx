@@ -20,10 +20,10 @@ const Stars = (props) => {
 		const scroll = props.scrollCount;
 		if (scroll > 0) {
 			ref.current.rotation.x = 0;
-			ref.current.rotation.y -= delta / 5;
+			ref.current.rotation.y -= delta / 1;
 		} else if (scroll < 0) {
 			ref.current.rotation.x = 0;
-			ref.current.rotation.y += delta / 5;
+			ref.current.rotation.y += delta / 1;
 		}
 	});
 
@@ -72,7 +72,7 @@ const StarsCanvas = () => {
 			className="stars-container"
 			style={{
 				width: "100%",
-				height: "300vh",
+				height: "100vh",
 				zIndex: 800,
 				position: "absolute",
 				top: 0,
