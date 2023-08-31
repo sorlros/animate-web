@@ -209,7 +209,7 @@ const Home = () => {
 					<Image src={earth} alt="earth" style={{ width: "100%", height: "100vh" }} />
 				</motion.div> */}
 
-				<motion.div className="sc-container">
+				{/* <motion.div className="sc-container">
 					<Image
 						className="sc-planet"
 						src={planetPic}
@@ -243,7 +243,7 @@ const Home = () => {
 							height: "400px",
 						}}
 					/>
-				</motion.div>
+				</motion.div> */}
 
 				<StarsCanvas />
 				<motion.div>
